@@ -1,0 +1,47 @@
+@extends('layouts.user_type.auth')
+
+@section('title', 'Daftar Tahfidz')
+
+@section('content')
+<div class="row">
+    <div class="col-lg-12">
+        <div class="box">
+            <div class="box-header with-border">
+                <h4>Daftar Tahfidz</h4>
+                <a href="{{ route('admin.tahfidz.form') }}" class="btn btn-success">Tambah Tahfidz</a>
+            </div>
+            <div class="box-body">
+                <table class="table table-bordered table-striped table-hover">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>No</th>
+                            <th>Nama Tahfidz</th>
+                            <th>Nama Ustadz</th>
+                            <th class="text-center">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($tahfidzs as $tahfidz)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>
+                                    <a href="{{ route('admin.tahfidz.edit', $tahfidz->id_tahfidz) }}">{{ $tahfidz->nama_tahfidz }}</a>
+                                </td>
+                                <td>{{ optional($tahfidz->pegawai)->nama_pegawai }}</td> <!-- Assuming you want to display the ustadz's name -->
+                                <td class="text-center">
+                                    <a href="{{ route('admin.tahfidz.edit', $tahfidz->id_tahfidz) }}" class="btn btn-warning btn-sm">Edit</a>
+                                    <form action="{{ route('admin.tahfidz.destroy', $tahfidz->id_tahfidz) }}" method="POST" style="display:inline-block;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus tahfidz ini?')">Hapus</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
