@@ -8,7 +8,6 @@
         <div class="box">
             <div class="box-header with-border">
                 <h4>Daftar Tahfidz</h4>
-                <a href="{{ route('admin.tahfidz.form') }}" class="btn btn-success">Tambah Tahfidz</a>
             </div>
             <div class="box-body">
                 <table class="table table-bordered table-striped table-hover">
@@ -26,16 +25,11 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>
                                     <!-- Mengubah tautan untuk mengarah ke halaman santri tahfidz -->
-                                    <a href="{{ route('admin.santri_tahfidz.index', $tahfidz->id_tahfidz) }}">{{ $tahfidz->nama_tahfidz }}</a>
+                                    <a href="{{ route('admin.hafalan.hafalan', $tahfidz->id_tahfidz) }}">{{ $tahfidz->nama_tahfidz }}</a>
                                 </td>
                                 <td>{{ optional($tahfidz->pegawai)->nama_pegawai }}</td> <!-- Menampilkan nama ustadz -->
                                 <td class="text-center">
-                                    <a href="{{ route('admin.tahfidz.edit', $tahfidz->id_tahfidz) }}" class="btn btn-warning btn-sm">Edit</a>
-                                    <form action="{{ route('admin.tahfidz.destroy', $tahfidz->id_tahfidz) }}" method="POST" style="display:inline-block;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus tahfidz ini?')">Hapus</button>
-                                    </form>
+                                    <a href="{{ route('admin.hafalan.hafalan', $tahfidz->id_tahfidz) }}" class="btn btn-warning btn-sm">Input Hafalan</a>
                                 </td>
                             </tr>
                         @endforeach

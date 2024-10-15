@@ -15,9 +15,6 @@ class TahfidzController extends Controller
         return view('admin.tahfidz.index', compact('tahfidzs'));
     }
 
-    // Menampilkan form untuk menambah tahfidz
-// Menampilkan form untuk menambah tahfidz
-// Menampilkan form untuk menambah tahfidz
     public function form()
     {
         $pegawais = pegawai::where('jabatan', 'tahfidz')->get(); // Retrieve only pegawai with jabatan 'tahfidz'

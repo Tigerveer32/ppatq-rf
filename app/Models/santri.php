@@ -46,4 +46,10 @@ class santri extends Model
         'tgl_lahir' => 'datetime:d/m/Y', // Format dd/mm/yyyy
     ];
     public $timestamps = true;
+
+    public function santriTahfidz()
+    {
+        return $this->hasMany(Santri_Tahfidz::class, 'id_santri');
+    }
+
 }

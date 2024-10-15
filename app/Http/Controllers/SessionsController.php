@@ -31,11 +31,10 @@ class SessionsController extends Controller
         }
     }
     
-    public function destroy()
+    public function destroy(Request $request)
     {
-
-        Auth::logout();
-
-        return redirect('/login')->with(['success'=>'You\'ve been logged out.']);
+        Auth::logout(); // Logout pengguna
+        return redirect('/login')->with('success', 'Anda telah logout.');
     }
+    
 }
