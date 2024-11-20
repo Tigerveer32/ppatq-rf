@@ -17,7 +17,6 @@ class Santri_Tahfidz extends Model
     protected $fillable = [
         'id_santri',
         'id_tahfidz',
-        'id_pegawai',
         'created_at',
         'updated_at'
     ];
@@ -35,8 +34,4 @@ class Santri_Tahfidz extends Model
     }
 
     // Relasi ke model Pegawai
-    public function pegawai()
-    {
-        return $this->belongsTo(pegawai::class, 'id_pegawai', 'id_pegawai');
-    }
 }

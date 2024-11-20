@@ -16,6 +16,11 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SantriTahfidzController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\MurobbyController;
+use App\Http\Controllers\SantriMurobbyController;
+use App\Http\Controllers\Tahfidz\KetahfidzanController;
+use App\Http\Controllers\Tahfidz\TargetHafalanController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -52,10 +57,13 @@ Route::group(['middleware' => ['auth', 'role:admin']], function () {
     Route::put('/tahfidz/{tahfidz}', [TahfidzController::class, 'update'])->name('admin.tahfidz.update');
     Route::delete('/tahfidz/{tahfidz}', [TahfidzController::class, 'destroy'])->name('admin.tahfidz.destroy');
     // Route untuk Santri Tahfidz
-    Route::get('/santri_tahfidz/{id_tahfidz}', [SantriTahfidzController::class, 'index'])->name('admin.santri_tahfidz.index');
-    Route::get('/santri_tahfidz/{id_tahfidz}/form', [SantriTahfidzController::class, 'form'])->name('admin.santri_tahfidz.form');
-    Route::post('/santri_tahfidz/{id_tahfidz}/store', [SantriTahfidzController::class, 'store'])->name('admin.santri_tahfidz.store');
-    Route::delete('/santri_tahfidz/{id_tahfidz}/{santri_tahfidz}', [SantriTahfidzController::class, 'destroy'])->name('admin.santri_tahfidz.destroy');
+    Route::get('/kelompok_tahfidz', [SantriTahfidzController::class, 'indexTahfidz'])->name('admin.santri_tahfidz.indexTahfidz');
+    Route::get('/kelompok_tahfidz/{id_tahfidz}/santri', [SantriTahfidzController::class, 'indexSantri'])->name('admin.santri_tahfidz.indexSantri');
+    Route::get('/kelompok_tahfidz/{id_tahfidz}/santri/create', [SantriTahfidzController::class, 'form'])->name('admin.santri_tahfidz.form');
+    Route::post('/kelompok_tahfidz/{id_tahfidz}/santri', [SantriTahfidzController::class, 'store'])->name('admin.santri_tahfidz.store');
+    Route::get('/kelompok_tahfidz/{id_tahfidz}/santri/{id_santri_tahfidz}/edit', [SantriTahfidzController::class, 'edit'])->name('admin.santri_tahfidz.edit');
+    Route::put('/kelompok_tahfidz/{id_tahfidz}/santri/{id}', [SantriTahfidzController::class, 'update'])->name('update');
+    Route::delete('/kelompok_tahfidz/{id_tahfidz}/santri/{id_santri}', [SantriTahfidzController::class, 'destroy'])->name('admin.santri_tahfidz.destroy');
     //route untuk hafalan
     Route::get('/hafalan', [HafalanController::class, 'index'])->name('admin.hafalan.index');
     Route::get('/hafalan/hafalan/{id_tahfidz}', [HafalanController::class, 'hafalan'])->name('admin.hafalan.hafalan');
@@ -64,6 +72,21 @@ Route::group(['middleware' => ['auth', 'role:admin']], function () {
     Route::get('/hafalan/{tahfidz}', [HafalanController::class, 'edit'])->name('admin.hafalan.edit');
     Route::put('/hafalan/{tahfidz}', [HafalanController::class, 'update'])->name('admin.hafalan.update');
     Route::delete('/hafalan/{tahfidz}', [HafalanController::class, 'destroy'])->name('admin.hafalan.destroy');
+    //route untuk murobby
+    Route::get('/murobby', [MurobbyController::class, 'index'])->name('admin.murobby.index');
+    Route::get('/murobby/create', [MurobbyController::class, 'create'])->name('admin.murobby.form');
+    Route::post('/murobby', [MurobbyController::class, 'store'])->name('admin.murobby.store');
+    Route::get('/murobby/{id_murobby}/edit', [MurobbyController::class, 'edit'])->name('admin.murobby.edit');
+    Route::put('/murobby/{id_murobby}', [MurobbyController::class, 'update'])->name('admin.murobby.update');
+    Route::delete('/murobby/{id_murobby}', [MurobbyController::class, 'destroy'])->name('admin.murobby.destroy');
+    //route untuk santri murobby
+    Route::get('/kelompok_murobby', [SantriMurobbyController::class, 'index'])->name('admin.santri_murobby.index');
+    Route::get('/kelompok_murobby/{id_murobby}/santri', [SantriMurobbyController::class, 'indexSantri'])->name('admin.santri_murobby.indexSantri');
+    Route::get('/kelompok_murobby/{id_murobby}/santri/create', [SantriMurobbyController::class, 'create'])->name('admin.santri_murobby.create');
+    Route::post('/kelompok_murobby/{id_murobby}/santri', [SantriMurobbyController::class, 'store'])->name('admin.santri_murobby.store');
+    Route::get('/kelompok_murobby/{id_murobby}/santri/{id_santri}/edit', [SantriMurobbyController::class, 'edit'])->name('admin.santri_murobby.edit');
+    Route::put('/kelompok_murobby/{id_murobby}/santri/{id_santri}', [SantriMurobbyController::class, 'update'])->name('admin.santri_murobby.update');
+    Route::delete('/kelompok_murobby/{id_murobby}/santri/{id_santri}', [SantriMurobbyController::class, 'destroy'])->name('admin.santri_murobby.destroy');
     //route user management
     // Route untuk mengelola pengguna
     Route::get('/users', [UserController::class, 'index'])->name('admin.users.index');
@@ -78,21 +101,34 @@ Route::group(['middleware' => ['auth', 'role:admin']], function () {
         return view('dashboard');
     })->name('dashboard');
 
-    Route::post('/logout', [SessionsController::class, 'destroy'])->name('logout');
-
     // Rute lainnya ...
 });
 
     //Route tahfidz
     Route::group(['middleware' => ['auth', 'role:tahfidz']], function () {
-        Route::get('/', [DashboardTahfidzController::class, 'index'])-> name('tahfidz.dashboard');
-        Route::get('/tahfidz', [TahfidzController::class, 'index'])->name('admin.tahfidz.index');
-        Route::get('/tahfidz/form', [TahfidzController::class, 'form'])->name('admin.tahfidz.form');
-        Route::post('/tahfidz/store', [TahfidzController::class, 'store'])->name('admin.tahfidz.store');
-        Route::get('/tahfidz/{tahfidz}', [TahfidzController::class, 'edit'])->name('admin.tahfidz.edit');
-        Route::put('/tahfidz/{tahfidz}', [TahfidzController::class, 'update'])->name('admin.tahfidz.update');
-        Route::delete('/tahfidz/{tahfidz}', [TahfidzController::class, 'destroy'])->name('admin.tahfidz.destroy');
+        // Dashboard Tahfidz
+        Route::get('/dashboard-tahfidz', [DashboardTahfidzController::class, 'index'])->name('tahfidz.dashboard');
+    
+        // Ketahfidzan Routes
+        Route::get('/ketahfidzan', [KetahfidzanController::class, 'index'])->name('tahfidz.tahfidz.index'); // Daftar ketahfidzan
+        Route::get('/ketahfidzan/hafalan', [KetahfidzanController::class, 'hafalan'])->name('tahfidz.tahfidz.hafalan'); // Daftar hafalan
+        Route::get('/ketahfidzan/hafalan/form', [KetahfidzanController::class, 'form'])->name('tahfidz.tahfidz.form'); // Form input hafalan
+        Route::post('/ketahfidzan/hafalan', [KetahfidzanController::class, 'store'])->name('tahfidz.tahfidz.store'); // Simpan hafalan
+        Route::get('/ketahfidzan/hafalan/{tahfidz}/edit', [KetahfidzanController::class, 'edit'])->name('tahfidz.tahfidz.edit');
+        Route::put('/ketahfidzan/hafalan/{tahfidz}', [KetahfidzanController::class, 'update'])->name('tahfidz.tahfidz.update');
+        Route::delete('/ketahfidzan/hafalan/{tahfidz}', [KetahfidzanController::class, 'destroy'])->name('tahfidz.tahfidz.destroy');
+
+        Route::get('/target-hafalan', [TargetHafalanController::class, 'index'])->name('tahfidz.target.index');
+
+        Route::get('/target-hafalan/form', [TargetHafalanController::class, 'form'])->name('tahfidz.target.form'); 
+        Route::post('/target-hafalan/hafalan', [TargetHafalanController::class, 'store'])->name('tahfidz.target.store'); 
+        Route::delete('tahfidz/target/{targetHafalan}', [TargetHafalanController::class, 'destroy'])->name('tahfidz.target.destroy');
+
+        //route chart
+        Route::get('/chart', [TargetHafalanController::class, 'chart'])->name('tahfidz.grafik.chart');
     });
+    
+    
 
 
 // Rute untuk pengguna tamu
@@ -105,3 +141,10 @@ Route::group(['middleware' => 'guest'], function () {
 Route::get('/login', function () {
     return view('session/login-session');
 })->name('login');
+
+// Rute untuk pengguna yang sudah terautentikasi, termasuk untuk logout
+Route::group(['middleware' => ['auth']], function () {
+    Route::post('/logout', [SessionsController::class, 'destroy'])->name('logout');
+});
+
+

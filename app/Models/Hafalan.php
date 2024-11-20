@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\santri;
 use App\Models\tahfidz;
+
 class Hafalan extends Model
 {
     use HasFactory;

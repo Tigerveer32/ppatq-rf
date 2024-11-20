@@ -11,7 +11,7 @@
   <div class="collapse navbar-collapse  w-auto" id="sidenav-collapse-main">
     <ul class="navbar-nav">
       <li class="nav-item">
-        <a class="nav-link {{ (Request::is('dashboard') ? 'active' : '') }}" href="{{ url('dashboard') }}">
+        <a class="nav-link {{ (Request::is('dashboard-tahfidz') ? 'active' : '') }}" href="{{ url('dashboard-tahfidz') }}">
           <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
             <svg width="12px" height="12px" viewBox="0 0 45 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
               <title>shop </title>
@@ -32,46 +32,36 @@
       </li>
 
       <div>
-  <hr class="horizontal dark mt-2">
-  <ul class="navbar-nav">
-    <li class="nav-item">
-      <a class="nav-link {{ (Request::is('pegawai') ? 'active' : '') }}" href="{{ url('pegawai') }}">
-        <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-          <svg width="12px" height="12px" viewBox="0 0 45 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-            <!-- isi svg -->
-          </svg>
-        </div>
-        <span class="nav-link-text ms-1">Data Pegawai</span>
-      </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link {{ (Request::is('tahfidz') ? 'active' : '') }}" href="{{ url('tahfidz') }}">
-        <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-          <svg width="12px" height="12px" viewBox="0 0 45 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-            <!-- isi svg -->
-          </svg>
-        </div>
-        <span class="nav-link-text ms-1">Tahfidz</span>
-      </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link {{ (Request::is('hafalan') ? 'active' : '') }}" href="{{ url('hafalan') }}">
-        <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-          <svg width="12px" height="12px" viewBox="0 0 45 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-            <!-- isi svg -->
-          </svg>
-        </div>
-        <span class="nav-link-text ms-1">Hafalan</span>
-      </a>
-    </li>
-  </ul>
-</div>
+        <hr class="horizontal dark mt-2">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link {{ (Request::is('ketahfidzan') ? 'active' : '') }}" href="{{ url('ketahfidzan') }}">
+              <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                <svg width="12px" height="12px" viewBox="0 0 45 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                  <!-- isi svg -->
+                </svg>
+              </div>
+              <span class="nav-link-text ms-1">Tahfidz</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {{ (Request::is('ketahfidzan/hafalan') ? 'active' : '') }}" href="{{ url('ketahfidzan/hafalan') }}">
+              <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                <svg width="12px" height="12px" viewBox="0 0 45 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                  <!-- isi svg -->
+                </svg>
+              </div>
+              <span class="nav-link-text ms-1">Hafalan</span>
+            </a>
+          </li>
+        </ul>
+      </div>
 
-      <li class="nav-item mt-2">
+      <!-- <li class="nav-item mt-2">
         <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Laravel Examples</h6>
-      </li>
+      </li> -->
       <li class="nav-item">
-        <a class="nav-link {{ (Request::is('santri') ? 'active' : '') }}" href="{{ url('santri') }}">
+        <a class="nav-link {{ (Request::is('target-hafalan') ? 'active' : '') }}" href="{{ url('target-hafalan') }}">
           <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
             <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
               <title>office</title>
@@ -87,11 +77,11 @@
               </g>
             </svg>
           </div>
-          <span class="nav-link-text ms-1">Santri</span>
+          <span class="nav-link-text ms-1">Target Hafalan</span>
         </a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link {{ (Request::is('billing') ? 'active' : '') }}" href="{{ url('billing') }}">
+    <li class="nav-item">
+        <a class="nav-link {{ (Request::is('chart') ? 'active' : '') }}" href="{{ url('chart') }}">
           <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
             <svg width="12px" height="12px" viewBox="0 0 43 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
               <title>credit-card</title>
@@ -107,10 +97,10 @@
               </g>
             </svg>
           </div>
-          <span class="nav-link-text ms-1">Billing</span>
+          <span class="nav-link-text ms-1">Grafik</span>
         </a>
       </li>
-      <li class="nav-item">
+      <!--  <li class="nav-item">
         <a class="nav-link {{ (Request::is('virtual-reality') ? 'active' : '') }}" href="{{ url('virtual-reality') }}">
           <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
             <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -183,7 +173,8 @@
             </div>
             <span class="nav-link-text ms-1">User Management</span>
         </a>
-      </li>
+      </li> -->
+      
       <li class="nav-item">
         <a class="nav-link {{ (Request::is('profile') ? 'active' : '') }}" href="{{ url('profile') }}">
           <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -205,7 +196,7 @@
           <span class="nav-link-text ms-1">Profile</span>
         </a>
       </li>
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <a class="nav-link  " href="{{ url('static-sign-in') }}">
           <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
             <svg width="12px" height="12px" viewBox="0 0 40 44" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -246,7 +237,7 @@
           </div>
           <span class="nav-link-text ms-1">Sign Up</span>
         </a>
-      </li>
+      </li> -->
     </ul>
   </div>
 </aside>

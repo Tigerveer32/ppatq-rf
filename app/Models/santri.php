@@ -49,7 +49,12 @@ class santri extends Model
 
     public function santriTahfidz()
     {
-        return $this->hasMany(Santri_Tahfidz::class, 'id_santri');
+        return $this->hasMany(Santri_Tahfidz::class, 'id_santri', 'id_santri');
     }
+    public function SantriMurobby()
+    {
+        return $this->hasMany(SantriMurobby::class, 'id_santri','id_santri');
+    }
+    
 
 }

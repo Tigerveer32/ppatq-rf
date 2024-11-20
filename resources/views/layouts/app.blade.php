@@ -39,6 +39,58 @@
       padding: 20px;
       text-align: center; /* Atur sesuai kebutuhan */
     }
+    
+    /* Styling untuk pesan sukses */
+    .message-box {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 15px 25px;
+      border-radius: 8px;
+      font-size: 16px;
+      color: #fff;
+      max-width: 300px;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .message-box ul {
+      margin: 0;
+      padding: 0;
+    }
+
+    .message-box ul li {
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+
+    /* Styling untuk pesan error */
+    .bg-success {
+      background-color: #28a745;
+    }
+
+    .bg-danger {
+      background-color: #dc3545;
+    }
+    
+    /* Menambahkan animasi untuk munculnya pesan */
+    .message-box {
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
   </style>
 </head>
 
@@ -52,12 +104,26 @@
   @endguest
 
   <div class="content">
-    @if(session()->has('success'))
+  @if(session()->has('success'))
       <div x-data="{ show: true}"
           x-init="setTimeout(() => show = false, 4000)"
           x-show="show"
-          class="position-fixed bg-success rounded right-3 text-sm py-2 px-4">
+          class="message-box bg-success">
         <p class="m-0">{{ session('success')}}</p>
+      </div>
+    @endif
+
+    <!-- Menampilkan pesan error jika ada -->
+    @if ($errors->any())
+      <div x-data="{ show: true}"
+          x-init="setTimeout(() => show = false, 4000)"
+          x-show="show"
+          class="message-box bg-danger">
+        <ul class="m-0">
+          @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+          @endforeach
+        </ul>
       </div>
     @endif
 

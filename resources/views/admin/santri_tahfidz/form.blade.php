@@ -2,9 +2,9 @@
 
 @section('content')
 <div class="container">
-    <h1>Tambah Santri ke Kelompok Tahfidz - {{ $Tahfidz->nama_tahfidz }}</h1>
+    <h1>Tambah Santri ke Kelompok Tahfidz - {{ $tahfidz->nama_tahfidz }}</h1>
 
-    <form action="{{ route('admin.santri_tahfidz.store', $Tahfidz->id_tahfidz) }}" method="POST">
+    <form action="{{ route('admin.santri_tahfidz.store', $tahfidz->id_tahfidz) }}" method="POST">
         @csrf
         
         <div class="form-group">
@@ -21,7 +21,7 @@
         </div>
 
         <button type="submit" class="btn btn-primary">Tambah Santri</button>
-        <a href="{{ route('admin.santri_tahfidz.index', $Tahfidz->id_tahfidz) }}" class="btn btn-secondary">Kembali</a>
+        <a href="{{ route('admin.santri_tahfidz.indexSantri', $tahfidz->id_tahfidz) }}" class="btn btn-secondary">Kembali</a>
     </form>
 </div>
 @endsection

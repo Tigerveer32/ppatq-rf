@@ -26,7 +26,7 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>
                                     <!-- Mengubah tautan untuk mengarah ke halaman santri tahfidz -->
-                                    <a href="{{ route('admin.santri_tahfidz.index', $tahfidz->id_tahfidz) }}">{{ $tahfidz->nama_tahfidz }}</a>
+                                    <a href="{{ route('admin.santri_tahfidz.indexSantri', $tahfidz->id_tahfidz) }}">{{ $tahfidz->nama_tahfidz }}</a>
                                 </td>
                                 <td>{{ optional($tahfidz->pegawai)->nama_pegawai }}</td> <!-- Menampilkan nama ustadz -->
                                 <td class="text-center">
