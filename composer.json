@@ -13,7 +13,8 @@
         "guzzlehttp/guzzle": "^7.4",
         "laravel/framework": "^11.0",
         "laravel/sanctum": "^4.0",
-        "laravel/tinker": "^2.6"
+        "laravel/tinker": "^2.6",
+        "midtrans/midtrans-php": "^2.6"
     },
     "require-dev": {
         "spatie/laravel-ignition": "^2.0",

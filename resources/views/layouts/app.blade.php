@@ -99,6 +99,8 @@
     @yield('auth')
   @endauth
   @yield('tahfidz')
+  @yield('santri')
+  @yield('murobby')
   @guest
     @yield('guest')
   @endguest

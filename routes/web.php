@@ -20,6 +20,7 @@ use App\Http\Controllers\MurobbyController;
 use App\Http\Controllers\SantriMurobbyController;
 use App\Http\Controllers\Tahfidz\KetahfidzanController;
 use App\Http\Controllers\Tahfidz\TargetHafalanController;
+use App\Http\Controllers\Santri\PembayaranSantriController;
 
 
 /*
@@ -127,6 +128,23 @@ Route::group(['middleware' => ['auth', 'role:admin']], function () {
         //route chart
         Route::get('/chart', [TargetHafalanController::class, 'chart'])->name('tahfidz.grafik.chart');
     });
+
+
+    //Route Santri
+    Route::group(['middleware' => ['auth', 'role:walsan']], function () {
+        Route::get('/walsan', function () {
+            return view('santri.dashboard'); // Ganti dengan view yang sesuai
+        })->name('santri.dashboard');
+
+        //route pembayran
+        Route::get('/walsan/pembayaran', [PembayaranSantriController::class, 'index'])->name('santri.pembayaran.index');
+        Route::get('/walsan/pembayaran/create', [PembayaranSantriController::class, 'create'])->name('santri.pembayaran.create');
+        Route::post('/walsan/pembayaran/store', [PembayaranSantriController::class, 'store'])->name('santri.pembayaran.store');
+        Route::get('/walsan/pembayaran/{id_pembayaran}', [PembayaranSantriController::class, 'show'])->name('santri.pembayaran.show');
+        Route::post('walsan/pembayaran/snap_token', [PembayaranSantriController::class, 'createMidtransToken'])->name('santri.pembayaran.snap_token');
+    });
+    
+
     
     
 
