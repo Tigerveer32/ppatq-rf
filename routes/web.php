@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SantriTahfidzController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UangSakuController;
 use App\Http\Controllers\MurobbyController;
 use App\Http\Controllers\SantriMurobbyController;
 use App\Http\Controllers\Tahfidz\KetahfidzanController;
@@ -97,6 +98,10 @@ Route::group(['middleware' => ['auth', 'role:admin']], function () {
     Route::put('/users/{user}', [UserController::class, 'update'])->name('admin.users.update');
     Route::delete('/user/{user}', [UserController::class, 'destroy'])->name('admin.users.destroy'); 
 
+    //route uangsaku
+    Route::get('uang-saku', [UangSakuController::class, 'index']);
+
+
     Route::get('/', [HomeController::class, 'home']);
     Route::get('dashboard', function () {
         return view('dashboard');
@@ -142,6 +147,9 @@ Route::group(['middleware' => ['auth', 'role:admin']], function () {
         Route::post('/walsan/pembayaran/store', [PembayaranSantriController::class, 'store'])->name('santri.pembayaran.store');
         Route::get('/walsan/pembayaran/{id_pembayaran}', [PembayaranSantriController::class, 'show'])->name('santri.pembayaran.show');
         Route::post('walsan/pembayaran/snap_token', [PembayaranSantriController::class, 'createMidtransToken'])->name('santri.pembayaran.snap_token');
+        Route::get('/walsan/pembayaran/checkout/{id_pembayaran}', [PembayaranSantriController::class, 'checkout'])->name('santri.pembayaran.checkout');
+        Route::post('/midtrans/callback', [PembayaranSantriController::class, 'midtransCallback'])->name('midtrans.callback');
+
     });
     
 

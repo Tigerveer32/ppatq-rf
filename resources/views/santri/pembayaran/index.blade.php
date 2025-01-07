@@ -24,7 +24,7 @@
                         <td>{{ $item->payment_method }}</td>
                         <td>{{ $item->total_bayar }}</td>
                         <td>
-                            <a href="{{ route('santri.pembayaran.show', [$santri->id, $item->id]) }}" class="btn btn-info">Detail</a>
+                            <a href="{{ route('santri.pembayaran.show', [$santri->id_santri, $item->id]) }}" class="btn btn-info">Detail</a>
                         </td>
                     </tr>
                 @endforeach

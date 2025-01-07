@@ -30,7 +30,7 @@ class PembayaranSantriController extends Controller
         if (!$santri) {
             return redirect()->route('walsan')->with('error', 'Santri tidak ditemukan!');
         }
-        $pembayaran = Pembayaran::where('id_santri', $santri->id)->get();
+        $pembayaran = Pembayaran::where('id_santri', $santri->id_santri)->get();
         
         return view('santri.pembayaran.index', compact('santri', 'pembayaran'));
     }
@@ -53,15 +53,10 @@ class PembayaranSantriController extends Controller
     {
         $user = auth()->user();
         $santri = $user->santri;
-        // Validasi input
-
-        // Membuat token pembayaran dengan Midtrans
-        $snapToken = $this->createMidtransToken($request);
 
         // Simpan data pembayaran
         $pembayaran = Pembayaran::create([
             'status' => 'pending',
-            'snap_token' => $snapToken,
             'id_santri' => $santri->id_santri,
             'payment_method' => $request->payment_method,
             'total_bayar' => $this->calculateTotalBayar($request),
@@ -83,33 +78,26 @@ class PembayaranSantriController extends Controller
             'keterangan' => $request->keterangan,
         ]);
 
-        return redirect()->route('santri.pembayaran.index', ['id_santri' => $santri->id_santri])
-                         ->with('success', 'Pembayaran berhasil disimpan.');     
+        return redirect()->route('santri.pembayaran.checkout', ['id_pembayaran' => $pembayaran->id])
+                     ->with('success', 'Pembayaran berhasil disimpan. Silakan lanjutkan ke halaman checkout.');     
     }
 
-    private function createMidtransToken(Request $request)
+    // Menampilkan halaman checkout
+    public function checkout($id_pembayaran)
     {
-        //dd($request->all());
-        // Data untuk membuat transaksi di Midtrans
+        // Ambil pembayaran berdasarkan ID
+        $pembayaran = Pembayaran::findOrFail($id_pembayaran);
+        //dd($pembayaran);
+        $pembayaran_detail = PembayaranDetail::where('id_pembayaran', $id_pembayaran)->get();
+    
+        \Midtrans\Config::$serverKey = config('midtrans.serverKey');
+        \Midtrans\Config::$isProduction = false;
+        \Midtrans\Config::$isSanitized = true;
+        \Midtrans\Config::$is3ds = true;
+
         $transactionDetails = [
             'order_id' => 'ORDER-' . time(), // Gunakan ID unik untuk transaksi
-            'gross_amount' => $request->total, // Total pembayaran
-        ];
-
-        $itemDetails = [
-            [
-                'id' => 'ITEM1',
-                'price' => $request->spp,
-                'quantity' => 1,
-                'name' => 'SPP',
-            ],
-            [
-                'id' => 'ITEM2',
-                'price' => $request->uang_saku,
-                'quantity' => 1,
-                'name' => 'Uang Saku',
-            ],
-            // Tambahkan item lainnya sesuai dengan input form
+            'gross_amount' => $pembayaran->total_bayar, // Total pembayaran
         ];
 
         $user = auth()->user();
@@ -123,14 +111,74 @@ class PembayaranSantriController extends Controller
 
         $transactionData = [
             'transaction_details' => $transactionDetails,
-            'item_details' => $itemDetails,
             'customer_details' => $customerDetails,
         ];
 
         // Request ke Midtrans untuk membuat token
-        $snapToken = Snap::getSnapToken($transactionData);
-        return $snapToken;
+        $snapToken = \Midtrans\Snap::getSnapToken($transactionData);
+        $pembayaran->update(['snap_token' => $snapToken]);
+        // Cek jika pembayaran sudah berhasil
+        if ($pembayaran->status === 'success') {
+            return redirect()->route('santri.pembayaran.index')->with('success', 'Pembayaran telah berhasil.');
+        }
+    
+        // Tampilkan halaman checkout dengan detail pembayaran
+        return view('santri.pembayaran.checkout', compact('pembayaran', 'pembayaran_detail'));
     }
+
+    public function midtransCallback(Request $request)
+    {
+       // Mengambil payload dari request
+        $payload = $request->all();
+        $orderId = $payload['order_id'];  // ID transaksi dari Midtrans
+        $transactionStatus = $payload['transaction_status'];  // Status transaksi
+        $fraudStatus = $payload['fraud_status'] ?? null;  // Status fraud, jika ada
+
+        // Mencari pembayaran berdasarkan order_id
+        $pembayaran = Pembayaran::where('id_pembayaran', $orderId)->first();
+        dd($pembayaran); 
+        if (!$pembayaran) {
+            return response()->json(['status' => 'Transaction not found'], 404);
+        }
+
+        // Menangani berbagai status transaksi
+        if ($transactionStatus == 'capture') {
+            if ($fraudStatus == 'accept') {
+                // Pembayaran diterima dan tidak ada fraud
+                $pembayaran->update(['status' => 'success']);
+            } else {
+                // Pembayaran diterima, tapi ada fraud
+                $pembayaran->update(['status' => 'fraud']);
+            }
+        } elseif ($transactionStatus == 'settlement') {
+            // Pembayaran berhasil
+            $pembayaran->update(['status' => 'success']);
+        } elseif ($transactionStatus == 'pending') {
+            // Pembayaran masih dalam proses
+            $pembayaran->update(['status' => 'pending']);
+        } elseif ($transactionStatus == 'deny') {
+            // Pembayaran ditolak
+            $pembayaran->update(['status' => 'failed']);
+        } elseif ($transactionStatus == 'expire') {
+            // Pembayaran telah kedaluwarsa
+            $pembayaran->update(['status' => 'expired']);
+        } elseif ($transactionStatus == 'cancel') {
+            // Pembayaran dibatalkan
+            $pembayaran->update(['status' => 'canceled']);
+        }
+
+            // Jika pembayaran berhasil, redirect ke halaman pembayaran index
+            if ($pembayaran->status === 'success') {
+                return redirect()->route('santri.pembayaran.index')
+                                ->with('success', 'Pembayaran berhasil!');
+            }
+        
+
+        // Kirim response ke Midtrans untuk konfirmasi callback telah diterima
+        return response()->json(['status' => 'OK']);
+    }
+
+    
 
     // Menampilkan detail pembayaran
     public function show($id_santri, $id_pembayaran)

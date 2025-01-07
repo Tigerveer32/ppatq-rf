@@ -101,6 +101,7 @@
   @yield('tahfidz')
   @yield('santri')
   @yield('murobby')
+  @yield('scripts')
   @guest
     @yield('guest')
   @endguest
